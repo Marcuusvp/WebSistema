@@ -5,7 +5,7 @@ export const MenuPrincipal = () => {
 
   return(
     <LayoutBaseDePagina titulo='Menu Principal' barraDeFerramentas={(
-      <FerramentasDeDetalhe />
+      <FerramentasDeDetalhe mostrarBotaoSalvarEFechar/>
     )}>
       Testinho
     </LayoutBaseDePagina>
