@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { AppRoutes } from './routes';
@@ -12,5 +13,4 @@ export const App = () => {
       </BrowserRouter>
     </AppThemeProvider>
   );
-}
-
+};
