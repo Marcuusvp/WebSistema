@@ -1,1 +1,1 @@
-export * from './cadastro/CadastroDeClientes';
+export * from './menu-principal/MenuPrincipal';

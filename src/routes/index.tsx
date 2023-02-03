@@ -1,7 +1,6 @@
-import { Button } from '@mui/material';
 import { useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { CadastroDeClientes } from '../pages';
+import { MenuPrincipal } from '../pages';
 import { useDrawerContext } from '../shared/contexts';
 
 export const AppRoutes = () => {
@@ -22,7 +21,7 @@ export const AppRoutes = () => {
 
   return (
     <Routes>
-      <Route path="/pagina-inicial" element={<CadastroDeClientes/>} />
+      <Route path="/pagina-inicial" element={<MenuPrincipal/>} />
 
       <Route path='*' element={<Navigate to='/pagina-inicial' />} />
     </Routes>
