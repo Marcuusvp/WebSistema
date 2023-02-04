@@ -67,6 +67,7 @@ export const ListagemDePessoas: React.FC = () => {
           textoBotaoNovo='Adicionar'
           mostrarInputBusca
           textoDaBusca={busca}
+          aoClicarEmNovo={() => navigate('/pessoas/detalhe/cadastro')}
           aoMudarTextoDeBusca={texto => setSearchParams({busca: texto, pagina: '1'}, {replace: true})}
         />}>
       <TableContainer component={Paper} variant="outlined" sx={{ m: 1, width:'auto' }}>
