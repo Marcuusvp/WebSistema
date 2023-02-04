@@ -14,8 +14,8 @@ interface IFerramentasDaListagemProps{
 
 export const FerramentasDaListagem: React.FC<IFerramentasDaListagemProps> = ({
   textoDaBusca = '',
-  mostrarInputBusca = false,
   aoMudarTextoDeBusca,
+  mostrarInputBusca = false,
   aoClicarEmNovo,
   textoBotaoNovo = 'Novo',
   mostrarBotaoNovo = true,
@@ -35,9 +35,9 @@ export const FerramentasDaListagem: React.FC<IFerramentasDaListagemProps> = ({
 
       {mostrarInputBusca && (<TextField
         value={textoDaBusca}
-        onChange={(e) => aoMudarTextoDeBusca?.(e.target.value)}
         size='small'
         placeholder={Environment.INPUT_DE_BUSCA}
+        onChange={(e) => aoMudarTextoDeBusca?.(e.target.value)}
       />)}
 
       <Box flex={1} display='flex' justifyContent='end'>
