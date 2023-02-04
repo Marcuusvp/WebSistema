@@ -1,7 +1,8 @@
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { LinearProgress, Pagination, Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { FerramentasDaListagem } from '../../shared/components';
+import { Environment } from '../../shared/environment';
 import { useDebounce } from '../../shared/hooks';
 import { LayoutBaseDePagina } from '../../shared/layouts';
 import { IListagemPessoa, PessoasService } from '../../shared/services/pessoas/PessoaServices';
@@ -18,10 +19,14 @@ export const ListagemDePessoas: React.FC = () => {
     return searchParams.get('busca') || '';
   },[searchParams]);
 
+  const pagina = useMemo(() => {
+    return Number(searchParams.get('pagina') || '1');
+  },[searchParams]);
+
   useEffect(() => {
     setIsLoading(true);
     debounce(() => {
-      PessoasService.getAll(1, busca).then((result) => {
+      PessoasService.getAll(pagina, busca).then((result) => {
         setIsLoading(false);
         if(result instanceof Error){
           alert(result.message);
@@ -32,7 +37,7 @@ export const ListagemDePessoas: React.FC = () => {
         setTotalCount(result.totalCount);
       });
     });
-  },[busca]);
+  },[busca, pagina]);
 
   return(
     <LayoutBaseDePagina
@@ -42,7 +47,7 @@ export const ListagemDePessoas: React.FC = () => {
           textoBotaoNovo='Adicionar'
           mostrarInputBusca
           textoDaBusca={busca}
-          aoMudarTextoDeBusca={texto => setSearchParams({busca: texto}, {replace: true})}
+          aoMudarTextoDeBusca={texto => setSearchParams({busca: texto, pagina: '1'}, {replace: true})}
         />}>
       <TableContainer component={Paper} variant="outlined" sx={{ m: 1, width:'auto' }}>
         <Table>
@@ -66,6 +71,24 @@ export const ListagemDePessoas: React.FC = () => {
             ))}
 
           </TableBody>
+          {totalCount === 0 && !isLoading &&(
+            <caption>{Environment.LISTAGEM_VAZIA}</caption>
+          )}
+          <TableFooter> 
+            {(totalCount > 0 && totalCount > Environment.LIMITE_DE_LINHAS) && (<TableRow>
+              <TableCell colSpan={3}>                
+                <Pagination
+                  page={pagina}
+                  count={Math.ceil(totalCount/Environment.LIMITE_DE_LINHAS)}
+                  onChange={(e, newPage) => setSearchParams({busca, pagina: newPage.toString()}, {replace: true}) }/>                                
+              </TableCell>              
+            </TableRow>)}        
+            {isLoading && (<TableRow>
+              <TableCell colSpan={3}>                
+                <LinearProgress variant='indeterminate'/>                                
+              </TableCell>              
+            </TableRow>)}
+          </TableFooter>
         </Table>
       </TableContainer>
     </LayoutBaseDePagina>
