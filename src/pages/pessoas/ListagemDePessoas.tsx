@@ -1,4 +1,4 @@
-import { LinearProgress, Pagination, Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow } from '@mui/material';
+import { Icon, IconButton, LinearProgress, Pagination, Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { FerramentasDaListagem } from '../../shared/components';
@@ -39,6 +39,25 @@ export const ListagemDePessoas: React.FC = () => {
     });
   },[busca, pagina]);
 
+  const handleDelete = (id: number) => {
+    if(confirm('Deseja deletar esse cliente?')){
+      PessoasService.deleteById(id)
+        .then(result => {
+          if(result instanceof Error){
+            alert(result.message);
+          }else{
+            setRows(oldRows => {
+              return[
+                ...oldRows.filter(oldRow => oldRow.id !== id)
+                //Filtro simples para reexibir a lista onde os ID's forem diferentes do id informado no delete.
+              ];
+            });
+            alert('Registro apagado com sucesso');
+          }
+        });
+    }
+  };
+
   return(
     <LayoutBaseDePagina
       titulo="Lista de pessoas"
@@ -64,7 +83,12 @@ export const ListagemDePessoas: React.FC = () => {
 
             {rows.map(row => (
               <TableRow key={row.id}>
-                <TableCell>Ações</TableCell>
+                <IconButton size='small' onClick={() => handleDelete(row.id)}>
+                  <Icon>delete</Icon>
+                </IconButton>
+                <IconButton size='small'>
+                  <Icon>edit</Icon>
+                </IconButton>
                 <TableCell>{row.nomeCompleto}</TableCell>
                 <TableCell>{row.email}</TableCell>
               </TableRow>

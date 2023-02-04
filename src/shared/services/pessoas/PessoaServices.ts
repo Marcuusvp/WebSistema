@@ -70,7 +70,7 @@ const updateById = async (id: number, dados: IDetalhePessoa): Promise<void | Err
   }
 };
 
-const deleteById = async (id: number): Promise<any> => {
+const deleteById = async (id: number): Promise<void | Error> => {
   try {    
     await Api.delete(`/pessoas/${id}`);
   } catch (error) {
