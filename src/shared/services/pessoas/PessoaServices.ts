@@ -6,14 +6,14 @@ type TPessoasComTotalCount = {
   totalCount: number;
 }
 
-interface IListagemPessoa{
+export interface IListagemPessoa{
   id: number;
   email: string;
   cidadeId: number;
   nomeCompleto: string;
 }
 
-interface IDetalhePessoa{
+export interface IDetalhePessoa{
   id: number;
   email: string;
   cidadeId: number;
