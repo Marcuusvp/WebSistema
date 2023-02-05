@@ -1,17 +1,25 @@
 import { LinearProgress } from '@mui/material';
+import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FerramentasDeDetalhe } from '../../shared/components';
 import { VTextField } from '../../shared/forms';
 import { LayoutBaseDePagina } from '../../shared/layouts';
 import { PessoasService } from '../../shared/services/pessoas/PessoaServices';
 
+interface IFormData{
+  nomeCompleto: string,
+  cidadeId: number,
+  email: string,
+}
+
 export const DetalheDePessoas: React.FC = () => {
   const {id = 'cadastro'} = useParams<'id'>();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [nome, setNome] = useState('');
+  const formRef = useRef<FormHandles>(null);
   
   useEffect(() =>{
     if(id !== 'cadastro'){
@@ -31,8 +39,8 @@ export const DetalheDePessoas: React.FC = () => {
     return;
   },[id]);
 
-  const handleSave = () => {
-    console.log('opa');
+  const handleSave = (dados: IFormData) => {
+    console.log(dados);
   };
 
   const handleDelete = (id: number) => {
@@ -59,21 +67,27 @@ export const DetalheDePessoas: React.FC = () => {
           mostrarBotaoNovo={id !== 'cadastro'}
           mostrarBotaoApagar={id !== 'cadastro'}
           
-          aoClicarEmSalvar={() => handleSave}
-          aoClicarEmSalvarEFechar={() => handleSave}
+          aoClicarEmSalvar={() => formRef.current?.submitForm()}
+          aoClicarEmSalvarEFechar={() => () => formRef.current?.submitForm()}
           aoClicarEmApagar={() => handleDelete(Number(id))}
           aoClicarEmNovo={() => navigate('/pessoas/detalhe/cadastro')}
           aoClicarEmVoltar={() => navigate('/pessoas')}
         />
       }
     >
-      <Form onSubmit={console.log}>
+      <Form ref={formRef} onSubmit={handleSave}>
         <VTextField
           name='nomeCompleto'/>
+        <VTextField
+          name='email'/>
+        <VTextField
+          name='cidadeId'/>
       </Form>
+
       {isLoading &&(
         <LinearProgress variant='indeterminate'/>
       )}
+
     </LayoutBaseDePagina>
   );
 };
