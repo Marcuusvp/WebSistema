@@ -85,12 +85,14 @@ export const ListagemDePessoas: React.FC = () => {
 
             {rows.map(row => (
               <TableRow key={row.id}>
-                <IconButton size='small' onClick={() => handleDelete(row.id)}>
-                  <Icon>delete</Icon>
-                </IconButton>
-                <IconButton size='small' onClick={() => navigate(`/pessoas/detalhe/${row.id}`)}>
-                  <Icon>edit</Icon>
-                </IconButton>
+                <TableCell>
+                  <IconButton size='small' onClick={() => handleDelete(row.id)}>
+                    <Icon>delete</Icon>
+                  </IconButton>
+                  <IconButton size='small' onClick={() => navigate(`/pessoas/detalhe/${row.id}`)}>
+                    <Icon>edit</Icon>
+                  </IconButton>
+                </TableCell>
                 <TableCell>{row.nomeCompleto}</TableCell>
                 <TableCell>{row.email}</TableCell>
               </TableRow>
