@@ -156,5 +156,59 @@
       "email": "sim@sim.com",
       "nomeCompleto": "tetets se"
     }
+  ],
+  "cidades": [
+    {
+      "nome": "Porto Alegre",
+      "id": 1
+    },
+    {
+      "nome": "Passo Fundo",
+      "id": 2
+    },
+    {
+      "id": 3,
+      "nome": "Pelotas"
+    },
+    {
+      "id": 4,
+      "nome": "Rio De Janeiro"
+    },
+    {
+      "nome": "São Paulo",
+      "id": 5
+    },
+    {
+      "nome": "Salvador",
+      "id": 6
+    },
+    {
+      "nome": "Caxias",
+      "id": 7
+    },
+    {
+      "nome": "Lajeado",
+      "id": 8
+    },
+    {
+      "nome": "Uruguaiana",
+      "id": 9
+    },
+    {
+      "nome": "Rio Pardo",
+      "id": 10
+    },
+    {
+      "nome": "Vacaria",
+      "id": 11
+    },
+    {
+      "nome": "Bento Gonçalves",
+      "id": 12
+    },
+    {
+      "nome": "Fortaleza",
+      "id": 13
+    }
   ]
 }
