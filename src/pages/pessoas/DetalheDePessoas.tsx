@@ -6,6 +6,7 @@ import { VTextField , VForm, useVForm, IVFormErrors} from '../../shared/forms';
 import { LayoutBaseDePagina } from '../../shared/layouts';
 import { PessoasService } from '../../shared/services/pessoas/PessoaServices';
 import * as yup from 'yup';
+import { AutocompleteCidades } from './components/AutocompleteCidades';
 
 interface IFormData{
   nomeCompleto: string,
@@ -46,7 +47,7 @@ export const DetalheDePessoas: React.FC = () => {
       formRef.current?.setData({
         nomeCompleto: '',
         email: '',
-        cidadeId: '',
+        cidadeId: undefined,
       });  
     }
   },[id]);
@@ -135,12 +136,6 @@ export const DetalheDePessoas: React.FC = () => {
               <Typography variant='h6'>Geral</Typography>
             </Grid>
 
-            <Grid container item direction="row" spacing={2}>
-              <Grid item md={6}>
-                <VTextField label='Cidade id' name='cidadeId' fullWidth disabled={isLoading}/>
-              </Grid>
-            </Grid>
-
             <Grid container item direction="row">
               <Grid item md={6}>
                 <VTextField label='E-mail' name='email' fullWidth disabled={isLoading}/>
@@ -150,6 +145,12 @@ export const DetalheDePessoas: React.FC = () => {
             <Grid container item direction="row">
               <Grid item md={6}>
                 <VTextField onChange={(e) => setNome(e.target.value) } label='Nome Completo' name='nomeCompleto' fullWidth disabled={isLoading}/>
+              </Grid>
+            </Grid>
+
+            <Grid container item direction="row" spacing={2}>
+              <Grid item md={6}>
+                <AutocompleteCidades isExternalLoading={isLoading}/>
               </Grid>
             </Grid>
 
