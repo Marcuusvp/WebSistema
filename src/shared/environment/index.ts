@@ -15,4 +15,6 @@ export const Environment = {
    * Variável de conexão com back-end
    */
   URL_BASE: 'http://localhost:3333',
+
+  URL_AUTHAPI: 'https://localhost:7028'
 };

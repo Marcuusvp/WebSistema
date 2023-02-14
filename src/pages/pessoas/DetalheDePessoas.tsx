@@ -39,7 +39,6 @@ export const DetalheDePessoas: React.FC = () => {
           } else{
             setNome(result.nomeCompleto);
             console.log(result);
-
             formRef.current?.setData(result);
           }
         });
