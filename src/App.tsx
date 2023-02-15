@@ -3,23 +3,32 @@ import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import './shared/forms/TraducoesYup';
 import { AppRoutes } from './routes';
-import { MenuLateral } from './shared/components';
-import { AppThemeProvider, DrawerProvider } from './shared/contexts';
+import { Login, MenuLateral } from './shared/components';
+import { AppThemeProvider, AuthProvider, DrawerProvider } from './shared/contexts';
+
 
 
 export const App = () => {
   return (
-    <AppThemeProvider>
-      <DrawerProvider>
+    <AuthProvider>      
+      <AppThemeProvider>
 
-        <BrowserRouter>
+        <Login>
 
-          <MenuLateral>
-            <AppRoutes />
-          </MenuLateral>
+          <DrawerProvider>
+
+            <BrowserRouter>
+
+              <MenuLateral>
+                <AppRoutes />
+              </MenuLateral>
         
-        </BrowserRouter>
-      </DrawerProvider>
-    </AppThemeProvider>
+            </BrowserRouter>
+          </DrawerProvider>
+
+        </Login>
+
+      </AppThemeProvider>
+    </AuthProvider>
   );
 };
