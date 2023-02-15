@@ -5,12 +5,9 @@ interface IAuth{
 }
 
 const auth = async (email: string, password: string): Promise<IAuth | Error> => {
-  try {    
-    console.log(password);
-    console.log(email);
-    console.log('service');    
-    const { data } = await AuthApi.post('/login', { data: {email, password}});
-    console.log('passei o await');
+  try {  
+    const { data } = await AuthApi.post('/login',{email, password});
+    console.log(data);
     if(data){      
       return data;
     } 

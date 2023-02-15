@@ -10,13 +10,18 @@ const Api = axios.create({
 });
 
 const AuthApi = axios.create({
-  baseURL: Environment.URL_AUTHAPI,
+  baseURL: Environment.URL_AUTHAPI,  
   // headers:{
   //   Authorization: `Bearer ${JSON.parse(localStorage.getItem('APP_ACCESS_TOKEN')|| '')}`,
   // }
 });
 
 Api.interceptors.response.use(
+  (response) => responseInterceptor(response),
+  (error) => errorInteceptor(error),
+);
+
+AuthApi.interceptors.response.use(
   (response) => responseInterceptor(response),
   (error) => errorInteceptor(error),
 );
