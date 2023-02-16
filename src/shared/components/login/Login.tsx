@@ -2,7 +2,6 @@ import { Box, Button, Card, CardActions, CardContent, CircularProgress, TextFiel
 import { useState } from 'react';
 import * as yup from 'yup';
 import { useAuthContext } from '../../contexts';
-import { AuthService } from '../../services/api/auth/AuthService';
 
 const loginSchema = yup.object().shape({
   email: yup.string().email().required(),
@@ -20,10 +19,14 @@ export const Login: React.FC<ILoginProps> = ({ children }) => {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
-  const handleLogin = () => {
-    console.log('opa');    
+  const handleLogin = () => { 
     loginSchema.validate({email, password}, { abortEarly: false}).then(dadosValidados => {
-      login(dadosValidados.email, dadosValidados.password);
+      login(dadosValidados.email, dadosValidados.password).catch(error =>{
+        if(error.contemErro){
+          setEmailError(error.message);
+          setPasswordError(error.message);
+        }
+      });
     }).catch((errors:yup.ValidationError) => {
       errors.inner.forEach(error => {
         if(error.path === 'email'){
