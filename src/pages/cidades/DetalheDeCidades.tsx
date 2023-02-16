@@ -33,8 +33,6 @@ export const DetalheDeCidades: React.FC = () => {
             navigate('/cidades');
           } else{
             setNome(result.nome);
-            console.log(result);
-
             formRef.current?.setData(result);
           }
         });

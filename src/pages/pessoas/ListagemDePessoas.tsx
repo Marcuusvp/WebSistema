@@ -6,11 +6,13 @@ import { Environment } from '../../shared/environment';
 import { useDebounce } from '../../shared/hooks';
 import { LayoutBaseDePagina } from '../../shared/layouts';
 import { IListagemPessoa, PessoasService } from '../../shared/services/pessoas/PessoaServices';
+import { useAuthContext } from '../../shared/contexts';
 
 export const ListagemDePessoas: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const {debounce} = useDebounce();
   const navigate = useNavigate();
+  const { temPermissao } = useAuthContext();
 
   const [rows, setRows] = useState<IListagemPessoa[]>([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -25,7 +27,7 @@ export const ListagemDePessoas: React.FC = () => {
   },[searchParams]);
 
   useEffect(() => {
-    setIsLoading(true);
+    setIsLoading(true); 
     debounce(() => {
       PessoasService.getAll(pagina, busca).then((result) => {
         setIsLoading(false);
@@ -33,7 +35,6 @@ export const ListagemDePessoas: React.FC = () => {
           alert(result.message);
           return;
         }
-        console.log(result);
         setRows(result.data);
         setTotalCount(result.totalCount);
       });
@@ -64,6 +65,7 @@ export const ListagemDePessoas: React.FC = () => {
       titulo="Lista de pessoas"
       barraDeFerramentas={
         <FerramentasDaListagem
+          mostrarBotaoNovo={temPermissao('GERENTE')}
           textoBotaoNovo='Adicionar'
           mostrarInputBusca
           textoDaBusca={busca}

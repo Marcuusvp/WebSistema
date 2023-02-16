@@ -38,7 +38,6 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) =>{
   const handleLogin = useCallback(async(email: string, password: string) => {
     const result = await AuthService.auth(email, password);
     if(result instanceof Error){
-      console.log(result.message);
       return result.message;
     } else{
       localStorage.setItem(LOCAL_STORAGE_KEY__ACCESS_TOKEN, JSON.stringify(result.token));

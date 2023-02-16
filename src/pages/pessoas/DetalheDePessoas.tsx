@@ -38,7 +38,6 @@ export const DetalheDePessoas: React.FC = () => {
             navigate('/pessoas');
           } else{
             setNome(result.nomeCompleto);
-            console.log(result);
             formRef.current?.setData(result);
           }
         });

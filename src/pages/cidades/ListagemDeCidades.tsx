@@ -6,11 +6,13 @@ import { Environment } from '../../shared/environment';
 import { useDebounce } from '../../shared/hooks';
 import { LayoutBaseDePagina } from '../../shared/layouts';
 import { IListagemCidade, CidadesServices } from '../../shared/services/cidades/CidadesServices';
+import { useAuthContext } from '../../shared/contexts';
 
 export const ListagemDeCidades: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const {debounce} = useDebounce();
   const navigate = useNavigate();
+  const { temPermissao } = useAuthContext();
 
   const [rows, setRows] = useState<IListagemCidade[]>([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -33,7 +35,6 @@ export const ListagemDeCidades: React.FC = () => {
           alert(result.message);
           return;
         }
-        console.log(result);
         setRows(result.data);
         setTotalCount(result.totalCount);
       });
@@ -64,6 +65,7 @@ export const ListagemDeCidades: React.FC = () => {
       titulo="Lista de cidades"
       barraDeFerramentas={
         <FerramentasDaListagem
+          mostrarBotaoNovo={temPermissao('GERENTE')}
           textoBotaoNovo='Adicionar'
           mostrarInputBusca
           textoDaBusca={busca}
