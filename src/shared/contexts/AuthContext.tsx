@@ -25,13 +25,17 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) =>{
 
   useEffect(() => {
     const accessToken = localStorage.getItem(LOCAL_STORAGE_KEY__ACCESS_TOKEN);
-
+    //const permissoes = localStorage.getItem('PERMISSOES');
     if(accessToken){
       setAccessToken(JSON.parse(accessToken));
     }else{
       setAccessToken(undefined);  
     }
-
+    // if(permissoes){
+    //   setPermissoes(JSON.parse(permissoes));
+    // }else{
+    //   setPermissoes([]);  
+    // }
   },[]);
 
   //Sempre que se usar uma função que está sendo passada por parâmetro em um contexto, deve-se usar o useCallback
@@ -41,17 +45,18 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) =>{
       return result.message;
     } else{
       localStorage.setItem(LOCAL_STORAGE_KEY__ACCESS_TOKEN, JSON.stringify(result.token));
+      localStorage.setItem('PERMISSOES', JSON.stringify(result.permissoes.map(permissao => permissao.nome)));
       setAccessToken(result.token);
       AuthApi.defaults.headers.Authorization = `Bearer ${accessToken}`;
       setPermissoes(result.permissoes.map(permissao => permissao.nome));
-      setUsuario(result.username);
+      setUsuario(result.username);      
     }
   },[]);
 
   const handleLogout = useCallback(() => {
     localStorage.removeItem(LOCAL_STORAGE_KEY__ACCESS_TOKEN);
     setAccessToken(undefined);
-  },[]);
+  },[]);  
 
   const handlePermissoes = useCallback((nomePermissao: string) => {
     return permissoes.includes(nomePermissao);

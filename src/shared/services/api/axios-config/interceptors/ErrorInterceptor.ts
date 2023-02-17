@@ -10,5 +10,9 @@ export const errorInteceptor = (error: AxiosError) => {
     return Promise.reject(new Error('Falha de autenticação'));
   }
 
+  if(error.response?.status === 400){
+    return Promise.reject(new Error('USUÁRIO/SENHA Inválidos'));
+  }
+
   return Promise.reject(error);
 };

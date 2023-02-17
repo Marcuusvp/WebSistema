@@ -12,7 +12,7 @@ export const ListagemDeCidades: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const {debounce} = useDebounce();
   const navigate = useNavigate();
-  const { temPermissao } = useAuthContext();
+  const { temPermissao, isAuthenticated } = useAuthContext();
 
   const [rows, setRows] = useState<IListagemCidade[]>([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -26,6 +26,11 @@ export const ListagemDeCidades: React.FC = () => {
     return Number(searchParams.get('pagina') || '1');
   },[searchParams]);
 
+  useEffect(() => {
+    console.log(temPermissao('GERENTE'));
+    console.log(isAuthenticated);
+  },[]);
+  
   useEffect(() => {
     setIsLoading(true);
     debounce(() => {

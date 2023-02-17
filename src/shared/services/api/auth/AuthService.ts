@@ -1,3 +1,4 @@
+import { STATUS_CODES } from 'http';
 import { AuthApi } from '../axios-config';
 
 interface IPermissao{

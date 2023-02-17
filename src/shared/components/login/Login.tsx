@@ -21,12 +21,11 @@ export const Login: React.FC<ILoginProps> = ({ children }) => {
 
   const handleLogin = () => { 
     loginSchema.validate({email, password}, { abortEarly: false}).then(dadosValidados => {
-      login(dadosValidados.email, dadosValidados.password).catch(error =>{
-        if(error.contemErro){
-          setEmailError(error.message);
-          setPasswordError(error.message);
-        }
-      });
+      login(dadosValidados.email, dadosValidados.password).then(result => {
+        if(result !== undefined){
+          setEmailError(result);
+          setPasswordError(result);
+        }});
     }).catch((errors:yup.ValidationError) => {
       errors.inner.forEach(error => {
         if(error.path === 'email'){
