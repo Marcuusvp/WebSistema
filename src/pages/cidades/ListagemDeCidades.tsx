@@ -28,7 +28,7 @@ export const ListagemDeCidades: React.FC = () => {
 
   useEffect(() => {
     console.log(temPermissao('GERENTE'));
-    console.log(isAuthenticated);
+    //console.log(isAuthenticated);
   },[]);
   
   useEffect(() => {
