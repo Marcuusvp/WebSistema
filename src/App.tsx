@@ -5,30 +5,34 @@ import './shared/forms/TraducoesYup';
 import { AppRoutes } from './routes';
 import { Login, MenuLateral } from './shared/components';
 import { AppThemeProvider, AuthProvider, DrawerProvider } from './shared/contexts';
+import { Provider } from 'react-redux';
+import store from './store';
 
 
 
 export const App = () => {
-  return (
-    <AuthProvider>      
-      <AppThemeProvider>
+  return (    
+    <Provider store={store}>
+      <AuthProvider>      
+        <AppThemeProvider>
 
-        <Login>
+          <Login>
 
-          <DrawerProvider>
+            <DrawerProvider>
 
-            <BrowserRouter>
+              <BrowserRouter>
 
-              <MenuLateral>
-                <AppRoutes />
-              </MenuLateral>
+                <MenuLateral>
+                  <AppRoutes />
+                </MenuLateral>
         
-            </BrowserRouter>
-          </DrawerProvider>
+              </BrowserRouter>
+            </DrawerProvider>
 
-        </Login>
+          </Login>
 
-      </AppThemeProvider>
-    </AuthProvider>
+        </AppThemeProvider>
+      </AuthProvider>
+    </Provider>    
   );
 };

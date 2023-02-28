@@ -1,8 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, useReducer } from 'react';
 import { AuthService } from '../services/api/auth/AuthService';
 import { AuthApi } from '../services/api/axios-config';
-
-
+import jwt_decode from 'jwt-decode';
 
 interface IAuthContextData{
   isAuthenticated: boolean;
@@ -10,6 +9,14 @@ interface IAuthContextData{
   login: (email: string, password: string) => Promise<string | void>
   username: string | undefined;
   temPermissao : (nomePermissao:string) => boolean
+}
+
+interface IAcessToken {
+  unique_name: string;
+  role: string[];
+  nbf: number;
+  exp: number;
+  iat: number;
 }
 
 const AuthContext = createContext({} as IAuthContextData);
@@ -22,23 +29,27 @@ interface IAuthProviderProps{
 
 export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) =>{
   const [accessToken, setAccessToken] = useState<string>();
-  const [permissoes, setPermissoes] = useState<string[]>([]);
+  const [permissoesContext, setPermissoesContext] = useState<string[]>([]);
   const [usuario, setUsuario] = useState<string>();
-
+  const [userInfo, setUserInfo] = useState<IAcessToken | null>(null);
 
   useEffect(() => {
     const accessToken = localStorage.getItem(LOCAL_STORAGE_KEY__ACCESS_TOKEN);
-    const permissoes = localStorage.getItem('PERMISSOES');
+    const permissoesContext = localStorage.getItem('PERMISSOES');
     if(accessToken){
       setAccessToken(JSON.parse(accessToken));
+      const decodedToken = jwt_decode<IAcessToken>(accessToken);
+      const { unique_name, role, nbf, exp, iat } = decodedToken;
+      setUserInfo({ unique_name, role, nbf, exp, iat });
     }else{
       setAccessToken(undefined);  
     }
-    if(permissoes){
-      setPermissoes(JSON.parse(permissoes));
+    if(permissoesContext){
+      setPermissoesContext(JSON.parse(permissoesContext));
     }else{
-      setPermissoes([]);  
+      setPermissoesContext([]);  
     }
+    //console.log(userInfo?.role);
   },[]);
 
   //Sempre que se usar uma função que está sendo passada por parâmetro em um contexto, deve-se usar o useCallback
@@ -50,10 +61,11 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) =>{
       localStorage.setItem(LOCAL_STORAGE_KEY__ACCESS_TOKEN, JSON.stringify(result.token));
       setAccessToken(result.token);
       AuthApi.defaults.headers.Authorization = `Bearer ${accessToken}`;
-      setPermissoes(result.permissoes.map(permissao => permissao.nome));
+      setPermissoesContext(result.permissoes.map(permissao => permissao.nome));
       setUsuario(result.username);
-      console.log(permissoes);
-      localStorage.setItem('PERMISSOES', JSON.stringify(permissoes));
+      //result.permissoes.forEach(permissao => dispatch(addPermissao(permissao.nome))); => Código mantido para estudo
+      console.log(permissoesContext);
+      localStorage.setItem('PERMISSOES', JSON.stringify(permissoesContext));
     }
   },[]);
 
@@ -64,8 +76,11 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) =>{
   },[]);  
 
   const handlePermissoes = useCallback((nomePermissao: string) => {
-    return permissoes.includes(nomePermissao);
-  }, [permissoes]);
+    if (userInfo?.role) {
+      return userInfo.role.includes(nomePermissao);
+    }
+    return false;
+  }, [userInfo]);
   
   const isAuthenticated = useMemo(() => !!accessToken, [accessToken]);
 
