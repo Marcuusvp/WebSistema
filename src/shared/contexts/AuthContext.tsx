@@ -49,7 +49,6 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) =>{
     }else{
       setPermissoesContext([]);  
     }
-    //console.log(userInfo?.role);
   },[]);
 
   //Sempre que se usar uma função que está sendo passada por parâmetro em um contexto, deve-se usar o useCallback
@@ -60,6 +59,9 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) =>{
     } else{
       localStorage.setItem(LOCAL_STORAGE_KEY__ACCESS_TOKEN, JSON.stringify(result.token));
       setAccessToken(result.token);
+      const decodedToken = jwt_decode<IAcessToken>(result.token);
+      const { unique_name, role, nbf, exp, iat } = decodedToken;
+      setUserInfo({ unique_name, role, nbf, exp, iat });
       AuthApi.defaults.headers.Authorization = `Bearer ${accessToken}`;
       setPermissoesContext(result.permissoes.map(permissao => permissao.nome));
       setUsuario(result.username);

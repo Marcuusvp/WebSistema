@@ -1,7 +1,8 @@
-import { Box, Button, Card, CardActions, CardContent, CircularProgress, TextField, Typography } from '@mui/material';
+import { Box, Button, Card, CardActions, CardContent, CircularProgress, Link, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import * as yup from 'yup';
 import { useAuthContext } from '../../contexts';
+import { EsqueciMinhaSenha } from './EsqueciMinhaSenha';
 
 const loginSchema = yup.object().shape({
   email: yup.string().email().required(),
@@ -18,8 +19,11 @@ export const Login: React.FC<ILoginProps> = ({ children }) => {
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
 
-  const handleLogin = () => { 
+  const handleLogin = () => {
+    setShowForgotPassword(false);
+    console.log(showForgotPassword);
     loginSchema.validate({email, password}, { abortEarly: false}).then(dadosValidados => {
       login(dadosValidados.email, dadosValidados.password).then(result => {
         if(result !== undefined){
@@ -41,51 +45,58 @@ export const Login: React.FC<ILoginProps> = ({ children }) => {
     <>{children}</>
   );
 
+  const esqueciMinhaSenha = () =>{
+    setShowForgotPassword(true);
+  };
+
   return(
     <Box width='100vw' height='100vh' display='flex' alignItems='center' justifyContent='center'>
-      <Card>
-        <CardContent>
-          <Box display='flex' flexDirection='column' gap={2} width={250}>
+      {showForgotPassword ? (
+        <EsqueciMinhaSenha />
+      ) : (
+        <Card>
+          <CardContent>
+            <Box display='flex' flexDirection='column' gap={2} width={250}>
 
-            <Typography variant='h6' align='center'>
+              <Typography variant='h6' align='center'>
               Realizar Login
-            </Typography>
-            <TextField fullWidth 
-              label='E-mail' 
-              type='email'
-              disabled={isLoading}             
-              value={email} 
-              onChange={e => setEmail(e.target.value)}
-              error={!!emailError}
-              helperText={emailError}
-              onKeyDown={() => setEmailError('')}/>
+              </Typography>
+              <TextField fullWidth 
+                label='E-mail' 
+                type='email'
+                disabled={isLoading}             
+                value={email} 
+                onChange={e => setEmail(e.target.value)}
+                error={!!emailError}
+                helperText={emailError}
+                onKeyDown={() => setEmailError('')}/>
 
-            <TextField fullWidth 
-              label='Senha'
-              disabled={isLoading}
-              type='password'
-              value={password} 
-              onChange={e => setPassword(e.target.value)}
-              error={!!passwordError}
-              helperText={passwordError}
-              onKeyDown={() => setPasswordError('')}/>
+              <TextField fullWidth 
+                label='Senha'
+                disabled={isLoading}
+                type='password'
+                value={password} 
+                onChange={e => setPassword(e.target.value)}
+                error={!!passwordError}
+                helperText={passwordError}
+                onKeyDown={() => setPasswordError('')}/>
            
-          </Box>
-        </CardContent>
-        <CardActions>
-          <Box width='100%' display='flex' justifyContent='center'>
-
-            <Button 
-              variant='contained'
-              onClick={handleLogin}
-              endIcon={isLoading ? <CircularProgress size={20} variant='indeterminate' color='inherit'/> : undefined}
-            >
+              <Link alignSelf='center' onClick={esqueciMinhaSenha}>Esqueci minha senha</Link>
+            </Box>
+          </CardContent>
+          <CardActions>
+            <Box width='100%' display='flex' justifyContent='center'>
+              <Button 
+                variant='contained'
+                onClick={handleLogin}
+                endIcon={isLoading ? <CircularProgress size={20} variant='indeterminate' color='inherit'/> : undefined}
+              >
               Login
-            </Button>
+              </Button>
 
-          </Box>
-        </CardActions>
-      </Card>
+            </Box>
+          </CardActions>
+        </Card>)}
     </Box>
   );
 };

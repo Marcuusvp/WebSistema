@@ -13,13 +13,32 @@ interface IAuth{
   permissoes: IPermissao[]
 }
 
+interface INewPassword{
+  alterado: boolean
+  erros: string
+}
+
 const auth = async (email: string, password: string): Promise<IAuth | Error> => {
   try {  
     const { data } = await AuthApi.post('/login',{email, password});
     if(data.retorno){      
       return data.retorno;
     }
-    return new Error('Usuário/senha inválidos');
+    else{
+      return data.erros;
+    }
+  } catch (error) {
+    return new Error((error as { message: string }).message || 'Ocorreu um erro inesperado, contate o suporte'); 
+  }
+};
+
+const forgotPassword = async (email: string): Promise<INewPassword | Error> => {
+  try {
+    const { data } = await AuthApi.post('/esqueceu-senha', {email});
+    if(data.retorno){      
+      return data.retorno;
+    }
+    return new Error('Usuário inválido');
   } catch (error) {
     return new Error((error as { message: string }).message || 'Ocorreu um erro inesperado, contate o suporte'); 
   }
@@ -28,4 +47,5 @@ const auth = async (email: string, password: string): Promise<IAuth | Error> => 
 
 export const AuthService = {
   auth,
+  forgotPassword,
 };
