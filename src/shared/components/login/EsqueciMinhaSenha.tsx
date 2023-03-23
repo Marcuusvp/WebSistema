@@ -10,7 +10,7 @@ const loginSchema = yup.object().shape({
 
 export const EsqueciMinhaSenha: React.FC = () => {
   const [email, setEmail] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
   const [emailError, setEmailError] = useState('');
   const [showLogin, setShowLogin] = useState(false);
 

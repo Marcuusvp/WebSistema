@@ -4,7 +4,7 @@ import { DetalheDePessoas, ListagemDePessoas, MenuPrincipal, ListagemDeCidades, 
 import { useDrawerContext } from '../shared/contexts';
 
 export const AppRoutes = () => {
-  const { toggleDrawerOpen, setDrawerOptions } = useDrawerContext();
+  const { setDrawerOptions } = useDrawerContext();
 
   useEffect(()=> {
     setDrawerOptions([{

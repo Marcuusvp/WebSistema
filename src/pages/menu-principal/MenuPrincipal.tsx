@@ -1,6 +1,6 @@
 import { Box, Card, CardContent, Grid, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { FerramentasDaListagem, FerramentasDeDetalhe } from '../../shared/components';
+import { FerramentasDaListagem } from '../../shared/components';
 import { LayoutBaseDePagina } from '../../shared/layouts';
 import { CidadesServices } from '../../shared/services/cidades/CidadesServices';
 import { PessoasService } from '../../shared/services/pessoas/PessoaServices';

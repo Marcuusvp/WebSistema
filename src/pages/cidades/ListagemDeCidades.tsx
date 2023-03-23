@@ -12,7 +12,7 @@ export const ListagemDeCidades: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const {debounce} = useDebounce();
   const navigate = useNavigate();
-  const { temPermissao, isAuthenticated } = useAuthContext();
+  const { temPermissao } = useAuthContext();
 
   const [rows, setRows] = useState<IListagemCidade[]>([]);
   const [totalCount, setTotalCount] = useState(0);

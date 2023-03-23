@@ -15,7 +15,7 @@ interface ILoginProps{
 export const Login: React.FC<ILoginProps> = ({ children }) => {
   const { isAuthenticated, login } = useAuthContext();
   const [email, setEmail] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');

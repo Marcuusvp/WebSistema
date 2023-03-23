@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, useReducer } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { AuthService } from '../services/api/auth/AuthService';
 import { AuthApi } from '../services/api/axios-config';
 import jwt_decode from 'jwt-decode';

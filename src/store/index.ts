@@ -1,4 +1,3 @@
-import { configureStore } from '@reduxjs/toolkit';
 import { createStore, combineReducers } from 'redux';
 import { PermissaoState, permissaoReducer } from './reducers/permissoesReducer';
 

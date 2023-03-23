@@ -1,4 +1,4 @@
-import { Autocomplete, CircularProgress, debounce, TextField } from '@mui/material';
+import { Autocomplete, CircularProgress, TextField } from '@mui/material';
 import { useField } from '@unform/core';
 import { useEffect, useMemo, useState } from 'react';
 import { useDebounce } from '../../../shared/hooks';
