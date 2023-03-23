@@ -16,5 +16,5 @@ export const Environment = {
    */
   URL_BASE: 'http://localhost:3333',
 
-  URL_AUTHAPI: 'https://localhost:7028'
+  URL_AUTHAPI: 'https://apidagila.up.railway.app'
 };
