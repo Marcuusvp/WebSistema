@@ -4,16 +4,15 @@ import { errorInteceptor, responseInterceptor } from './interceptors';
 
 const Api = axios.create({
   baseURL: Environment.URL_BASE,
-  // headers:{
-  //   Authorization: `Bearer ${JSON.parse(localStorage.getItem('APP_ACCESS_TOKEN')|| '')}`,
-  // }
 });
 
 const AuthApi = axios.create({
-  baseURL: Environment.URL_AUTHAPI,  
-  // headers:{
-  //   Authorization: `Bearer ${JSON.parse(localStorage.getItem('APP_ACCESS_TOKEN')|| '')}`,
-  // }
+  baseURL: Environment.URL_AUTHAPI,
+  headers: {
+    common: {
+      'Access-Control-Expose-Headers': 'x-total-count',
+    },
+  }, 
 });
 
 Api.interceptors.response.use(
@@ -22,7 +21,10 @@ Api.interceptors.response.use(
 );
 
 AuthApi.interceptors.response.use(
-  (response) => responseInterceptor(response),
+  (response) => {
+    response.headers['access-control-expose-headers'] = 'x-total-count';
+    return response;
+  },
   (error) => errorInteceptor(error),
 );
 

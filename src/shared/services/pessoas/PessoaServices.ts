@@ -1,5 +1,5 @@
 import { Environment } from '../../environment';
-import { Api } from '../api/axios-config';
+import { AuthApi } from '../api/axios-config';
 
 type TPessoasComTotalCount = {
   data: IListagemPessoa[];
@@ -22,12 +22,17 @@ export interface IDetalhePessoa{
 
 const getAll = async (page = 1, filter = ''): Promise<TPessoasComTotalCount | Error> => {
   try {
-    const urlRelativa = `/pessoas?_page=${page}&_limit=${Environment.LIMITE_DE_LINHAS}&nomeCompleto_like=${filter}`;
-    const { data, headers } = await Api.get(urlRelativa);
-    if(data){
+    const urlRelativa = `/listar-pessoas?_page=${page}&_limit=${Environment.LIMITE_DE_LINHAS}&nomeCompleto_like=${filter}`;
+    const response = await AuthApi.get(urlRelativa, {
+      headers: {
+        'Access-Control-Expose-Headers': 'x-total-count',
+      },
+    });
+    const totalCount = response.headers['x-total-count'];
+    if(response.data.retorno){
       return{
-        data,
-        totalCount: Number(headers['x-total-count'] || Environment.LIMITE_DE_LINHAS),
+        data: response.data.retorno,
+        totalCount: Number(totalCount || Environment.LIMITE_DE_LINHAS),
       };
     }
 
@@ -39,9 +44,9 @@ const getAll = async (page = 1, filter = ''): Promise<TPessoasComTotalCount | Er
 
 const getById = async (id: number): Promise<IDetalhePessoa | Error> => {
   try {    
-    const { data } = await Api.get(`/pessoas/${id}`);
-    if(data){
-      return data;
+    const { data } = await AuthApi.get(`/pessoa-por-id/${id}`);
+    if(data.retorno){
+      return data.retorno;
     }    
     return new Error('Pessoa não encontrada');
   } catch (error) {
@@ -49,14 +54,14 @@ const getById = async (id: number): Promise<IDetalhePessoa | Error> => {
   }
 };
 
-const create = async (dados: Omit<IDetalhePessoa, 'id'> ): Promise<number | Error> => {
+const create = async (dados: Omit<IDetalhePessoa, 'id'> ): Promise<boolean | Error> => {
   try {    
-    const { data } = await Api.post<IDetalhePessoa>('/pessoas', dados);
+    const { data } = await AuthApi.post<IDetalhePessoa>('/cadastrar-pessoa', dados);
     if(data){
-      return data.id;
+      return true;
     } 
 
-    return new Error('Pessoa não encontrada');
+    return new Error('Não foi possível realizar o cadastro');
   } catch (error) {
     return new Error((error as {message: string}).message || 'Ocorreu um erro inesperado, contate o suporte'); 
   }
@@ -64,7 +69,7 @@ const create = async (dados: Omit<IDetalhePessoa, 'id'> ): Promise<number | Erro
 
 const updateById = async (id: number, dados: IDetalhePessoa): Promise<void | Error> => {
   try {    
-    await Api.put(`/pessoas/${id}`, dados);
+    await AuthApi.put(`/atualizar-pessoa/${id}`, dados);
   } catch (error) {
     return new Error((error as {message: string}).message || 'Ocorreu um erro inesperado, contate o suporte'); 
   }
@@ -72,7 +77,7 @@ const updateById = async (id: number, dados: IDetalhePessoa): Promise<void | Err
 
 const deleteById = async (id: number): Promise<void | Error> => {
   try {    
-    await Api.delete(`/pessoas/${id}`);
+    await AuthApi.delete(`/deletar-pessoa/${id}`);
   } catch (error) {
     return new Error((error as {message: string}).message || 'Ocorreu um erro inesperado, contate o suporte'); 
   }

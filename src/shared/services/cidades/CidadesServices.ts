@@ -1,5 +1,5 @@
 import { Environment } from '../../environment';
-import { Api } from '../api/axios-config';
+import { AuthApi } from '../api/axios-config';
 
 type TCidadesComTotalCount = {
   data: IListagemCidade[];
@@ -18,26 +18,23 @@ export interface IDetalheCidade{
 
 const getAll = async (page = 1, filter = ''): Promise<TCidadesComTotalCount | Error> => {
   try {
-    const urlRelativa = `/cidades?_page=${page}&_limit=${Environment.LIMITE_DE_LINHAS}&nome_like=${filter}`;
-    const { data, headers } = await Api.get(urlRelativa);
-    if(data){
-      return{
-        data,
-        totalCount: Number(headers['x-total-count'] || Environment.LIMITE_DE_LINHAS),
-      };
-    }
-
-    return new Error('Erro ao listar registros');
+    const urlRelativa = `/listar-cidades?_page=${page}&_limit=${Environment.LIMITE_DE_LINHAS}&nome_like=${filter}`;
+    const { data, headers } = await AuthApi.get(urlRelativa);
+    return {
+      data: data.retorno,
+      totalCount: Number(headers['x-total-count'] || Environment.LIMITE_DE_LINHAS),
+    };
   } catch (error) {
-    return new Error((error as {message: string}).message || 'Ocorreu um erro inesperado, contate o suporte'); 
+    return new Error('Não foi possível buscar as cidades.');
   }
 };
 
+
 const getById = async (id: number): Promise<IDetalheCidade | Error> => {
   try {    
-    const { data } = await Api.get(`/cidades/${id}`);
-    if(data){
-      return data;
+    const { data } = await AuthApi.get(`/cidade-por-id/${id}`);
+    if(data.retorno){
+      return data.retorno;
     }    
     return new Error('Cidade não encontrada');
   } catch (error) {
@@ -47,7 +44,7 @@ const getById = async (id: number): Promise<IDetalheCidade | Error> => {
 
 const create = async (dados: Omit<IDetalheCidade, 'id'> ): Promise<number | Error> => {
   try {    
-    const { data } = await Api.post<IDetalheCidade>('/cidades', dados);
+    const { data } = await AuthApi.post<IDetalheCidade>('/cadastrar-cidade', dados);
     if(data){
       return data.id;
     } 
@@ -60,7 +57,7 @@ const create = async (dados: Omit<IDetalheCidade, 'id'> ): Promise<number | Erro
 
 const updateById = async (id: number, dados: IDetalheCidade): Promise<void | Error> => {
   try {    
-    await Api.put(`/cidades/${id}`, dados);
+    await AuthApi.put(`/atualizar-cidade/${id}`, dados);
   } catch (error) {
     return new Error((error as {message: string}).message || 'Ocorreu um erro inesperado, contate o suporte'); 
   }
@@ -68,7 +65,7 @@ const updateById = async (id: number, dados: IDetalheCidade): Promise<void | Err
 
 const deleteById = async (id: number): Promise<void | Error> => {
   try {    
-    await Api.delete(`/cidades/${id}`);
+    await AuthApi.delete(`/deletar-cidade/${id}`);
   } catch (error) {
     return new Error((error as {message: string}).message || 'Ocorreu um erro inesperado, contate o suporte'); 
   }
