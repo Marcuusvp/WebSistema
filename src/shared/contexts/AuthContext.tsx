@@ -41,8 +41,10 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) =>{
       const decodedToken = jwt_decode<IAcessToken>(accessToken);
       const { unique_name, role, nbf, exp, iat } = decodedToken;
       setUserInfo({ unique_name, role, nbf, exp, iat });
+      AuthApi.defaults.headers.Authorization = `Bearer ${accessToken}`;
     }else{
-      setAccessToken(undefined);  
+      setAccessToken(undefined);
+      delete AuthApi.defaults.headers.Authorization;
     }
     if(permissoesContext){
       setPermissoesContext(JSON.parse(permissoesContext));
