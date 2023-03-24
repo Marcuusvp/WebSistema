@@ -13,6 +13,7 @@ export const MenuPrincipal = () => {
   const [totalCountClientes, setTotalCountClientes] = useState(0);
 
   useEffect(() => {
+    console.log('OLÁ!');
     setIsLoadingCidades(true);    
     setIsLoadingClientes(true);    
     CidadesServices.getAll(1).then((result)=> {
