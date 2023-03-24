@@ -38,7 +38,6 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) =>{
     const permissoesContext = localStorage.getItem('PERMISSOES');
     if(accessToken){
       setAccessToken(JSON.parse(accessToken));
-      console.log(accessToken);
       const decodedToken = jwt_decode<IAcessToken>(accessToken);
       const { unique_name, role, nbf, exp, iat } = decodedToken;
       setUserInfo({ unique_name, role, nbf, exp, iat });
@@ -69,7 +68,6 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) =>{
       setPermissoesContext(result.permissoes.map(permissao => permissao.nome));
       setUsuario(result.username);
       //result.permissoes.forEach(permissao => dispatch(addPermissao(permissao.nome))); => Código mantido para estudo
-      console.log(permissoesContext);
       localStorage.setItem('PERMISSOES', JSON.stringify(permissoesContext));
     }
   },[]);
