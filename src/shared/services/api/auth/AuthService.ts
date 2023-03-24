@@ -17,6 +17,13 @@ interface INewPassword{
   erros: string
 }
 
+interface IUser{
+  userName: string
+  email: string
+  password: string
+  rePassword: string
+}
+
 const auth = async (email: string, password: string): Promise<IAuth | Error> => {
   try {  
     const { data } = await AuthApi.post('/login',{email, password});
@@ -43,8 +50,21 @@ const forgotPassword = async (email: string): Promise<INewPassword | Error> => {
   }
 };
 
+const newUser = async (user: IUser): Promise<boolean | Error> => {
+  try {
+    const { data } = await AuthApi.post('/cadastrar', user);
+    if(data.retorno){      
+      return data.retorno;
+    }
+    return new Error('Erro ao efetuar cadastro');
+  } catch (error) {
+    return new Error((error as { message: string }).message || 'Ocorreu um erro inesperado, contate o suporte'); 
+  }
+};
+
 
 export const AuthService = {
   auth,
   forgotPassword,
+  newUser,
 };

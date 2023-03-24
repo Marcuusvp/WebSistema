@@ -2,6 +2,7 @@ import { Box, Button, Card, CardActions, CardContent, CircularProgress, Link, Te
 import { useState } from 'react';
 import * as yup from 'yup';
 import { useAuthContext } from '../../contexts';
+import { Cadastro } from './CadastrarNovoUsuario';
 import { EsqueciMinhaSenha } from './EsqueciMinhaSenha';
 
 const loginSchema = yup.object().shape({
@@ -20,10 +21,11 @@ export const Login: React.FC<ILoginProps> = ({ children }) => {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
+
 
   const handleLogin = () => {
     setShowForgotPassword(false);
-    console.log(showForgotPassword);
     loginSchema.validate({email, password}, { abortEarly: false}).then(dadosValidados => {
       login(dadosValidados.email, dadosValidados.password).then(result => {
         if(result !== undefined){
@@ -53,6 +55,8 @@ export const Login: React.FC<ILoginProps> = ({ children }) => {
     <Box width='100vw' height='100vh' display='flex' alignItems='center' justifyContent='center'>
       {showForgotPassword ? (
         <EsqueciMinhaSenha />
+      ) : showRegister ? (
+        <Cadastro onSuccess={() => setShowRegister(false)}/> // Adicione esta linha
       ) : (
         <Card>
           <CardContent>
@@ -85,7 +89,7 @@ export const Login: React.FC<ILoginProps> = ({ children }) => {
             </Box>
           </CardContent>
           <CardActions>
-            <Box width='100%' display='flex' justifyContent='center'>
+            <Box width='100%' display='flex' justifyContent='center' gap={2}>
               <Button 
                 variant='contained'
                 onClick={handleLogin}
@@ -93,7 +97,17 @@ export const Login: React.FC<ILoginProps> = ({ children }) => {
               >
               Login
               </Button>
-
+              <Button
+                variant="outlined"
+                onClick={() => setShowRegister(true)}
+                endIcon={
+                  isLoading ? (
+                    <CircularProgress size={20} variant="indeterminate" color="inherit" />
+                  ) : undefined
+                }
+              >
+              Cadastrar
+              </Button>
             </Box>
           </CardActions>
         </Card>)}

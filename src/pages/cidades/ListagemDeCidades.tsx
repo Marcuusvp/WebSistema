@@ -25,11 +25,6 @@ export const ListagemDeCidades: React.FC = () => {
   const pagina = useMemo(() => {
     return Number(searchParams.get('pagina') || '1');
   },[searchParams]);
-
-  useEffect(() => {
-    console.log(temPermissao('GERENTE'));
-    //console.log(isAuthenticated);
-  },[]);
   
   useEffect(() => {
     setIsLoading(true);
