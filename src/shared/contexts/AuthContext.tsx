@@ -38,6 +38,7 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) =>{
     const permissoesContext = localStorage.getItem('PERMISSOES');
     if(accessToken){
       setAccessToken(JSON.parse(accessToken));
+      console.log(accessToken);
       const decodedToken = jwt_decode<IAcessToken>(accessToken);
       const { unique_name, role, nbf, exp, iat } = decodedToken;
       setUserInfo({ unique_name, role, nbf, exp, iat });
