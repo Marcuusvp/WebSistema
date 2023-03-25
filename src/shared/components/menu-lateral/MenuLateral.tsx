@@ -50,7 +50,7 @@ export const MenuLateral: React.FC<IMenuLateral> = ({ children }) => {
           <Box width="100%" height={theme.spacing(20)} display="flex" alignItems="center" justifyContent="center">
             <Avatar
               sx={{ height: theme.spacing(12), width: theme.spacing(12) }}
-              src='https://scontent.fpoa27-1.fna.fbcdn.net/v/t39.30808-6/325338326_889915982429332_2612462542664853192_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=CrnRRJhaoeQAX_ToM14&_nc_ht=scontent.fpoa27-1.fna&oh=00_AfDih4piv6-NKLWauGldnZ0fz_-fT63Bn63YDN4F3tQ8Fw&oe=63E0BE54'/>
+              src='https://media.discordapp.net/attachments/990816866618470440/1089327836738891866/UltimateTrollior_Kowloon_walled_city_cinematic_VFX_VFAA_Photogr_b86e7ae5-2ec3-45b4-8cef-aa02a28a71a0.png?width=676&height=676'/>
           </Box>
           <Divider/>
           <Box flex={1}>
