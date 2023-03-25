@@ -24,9 +24,9 @@ export const DetalheDeCidades: React.FC = () => {
   
   useEffect(() =>{
     if(id !== 'cadastro'){
-      setIsLoading(true);if (isNaN(Number(id))) {
+      setIsLoading(true);
+      if (isNaN(Number(id))) {
         setIsLoading(false);
-        alert('ID inválido');
         navigate('/cidades');
         return;}
       CidadesServices.getById(Number(id))

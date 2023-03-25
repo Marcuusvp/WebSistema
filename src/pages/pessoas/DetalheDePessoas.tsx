@@ -30,6 +30,11 @@ export const DetalheDePessoas: React.FC = () => {
   useEffect(() =>{
     if(id !== 'cadastro'){
       setIsLoading(true);
+      if (isNaN(Number(id))) {
+        setIsLoading(false);
+        navigate('/cidades');
+        return;
+      }
       PessoasService.getById(Number(id))
         .then((result) => {
           setIsLoading(false);
