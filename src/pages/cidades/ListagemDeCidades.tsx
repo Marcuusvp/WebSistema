@@ -65,7 +65,7 @@ export const ListagemDeCidades: React.FC = () => {
       titulo="Lista de cidades"
       barraDeFerramentas={
         <FerramentasDaListagem
-          mostrarBotaoNovo={temPermissao('GERENTE')}
+          mostrarBotaoNovo={temPermissao('ATENDENTE')}
           textoBotaoNovo='Adicionar'
           mostrarInputBusca
           textoDaBusca={busca}
