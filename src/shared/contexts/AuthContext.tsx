@@ -32,6 +32,10 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) =>{
   const [permissoesContext, setPermissoesContext] = useState<string[]>([]);
   const [usuario, setUsuario] = useState<string>();
   const [userInfo, setUserInfo] = useState<IAcessToken | null>(null);
+  //const SESSION_TIMEOUT = 1 * 60 * 60 * 1000; // Tempo limite da sessão em milissegundos, por exemplo, 1 hora
+  const SESSION_TIMEOUT = 30 * 60 * 1000; // Tempo limite da sessão em milissegundos, por exemplo, 1 minuto
+
+
 
   useEffect(() => {
     const accessToken = localStorage.getItem(LOCAL_STORAGE_KEY__ACCESS_TOKEN);
@@ -51,6 +55,7 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) =>{
     }else{
       setPermissoesContext([]);  
     }
+    checkSessionTimeout();
   },[]);
 
   //Sempre que se usar uma função que está sendo passada por parâmetro em um contexto, deve-se usar o useCallback
@@ -69,14 +74,29 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) =>{
       setUsuario(result.username);
       //result.permissoes.forEach(permissao => dispatch(addPermissao(permissao.nome))); => Código mantido para estudo
       localStorage.setItem('PERMISSOES', JSON.stringify(permissoesContext));
+      localStorage.setItem('sessionTimestamp', Date.now().toString());
     }
   },[]);
 
   const handleLogout = useCallback(() => {
     localStorage.removeItem(LOCAL_STORAGE_KEY__ACCESS_TOKEN);
     localStorage.removeItem('PERMISSOES');
+    localStorage.removeItem('sessionTimestamp');
     setAccessToken(undefined);
   },[]);  
+
+  const checkSessionTimeout = useCallback(() => {
+    const sessionTimestamp = localStorage.getItem('sessionTimestamp');
+    if (!sessionTimestamp) {
+      return;
+    }  
+    const currentTime = Date.now();
+    const elapsedTime = currentTime - parseInt(sessionTimestamp, 10);  
+    if (elapsedTime >= SESSION_TIMEOUT) {
+      handleLogout();
+    }
+  }, [handleLogout]);
+  
 
   const handlePermissoes = useCallback((nomePermissao: string) => {
     if (userInfo?.role) {
