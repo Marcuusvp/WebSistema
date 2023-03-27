@@ -2,19 +2,28 @@ import { Box, Button, Icon, Paper, useTheme, Divider, Skeleton, Typography, useM
 
 interface IFerramentasDeDetalheProps{
   textoBotaoNovo?: string;
+  textoBotaoGit?: string;
+  textoBotaoGitFront?: string;
 
+  mostrarBotaoGit?: boolean;
+  mostrarBotaoGitFront?: boolean;
   mostrarBotaoNovo?: boolean;
   mostrarBotaoVoltar?: boolean;
   mostrarBotaoApagar?: boolean;
   mostrarBotaoSalvar?: boolean;
   mostrarBotaoSalvarEFechar?: boolean;
 
+  mostrarBotaoGitCarregando?: boolean;
+  mostrarBotaoGitFrontCarregando?: boolean;
   mostrarBotaoNovoCarregando?: boolean;
   mostrarBotaoVoltarCarregando?: boolean;
   mostrarBotaoApagarCarregando?: boolean;
   mostrarBotaoSalvarCarregando?: boolean;
   mostrarBotaoSalvarEFecharCarregando?: boolean;
 
+  
+  aoClicarEmGit?: () => void;
+  aoClicarEmGitFront?: () => void;
   aoClicarEmNovo?: () => void;
   aoClicarEmVoltar?: () => void;
   aoClicarEmApagar?: () => void;
@@ -24,8 +33,12 @@ interface IFerramentasDeDetalheProps{
 
 export const FerramentasDeDetalhe: React.FC<IFerramentasDeDetalheProps> = ({
   textoBotaoNovo: textoBotaoNovo = 'Novo',
+  textoBotaoGit: textoBotaoGit = '',
+  textoBotaoGitFront: textoBotaoGitFront = '',
 
   mostrarBotaoNovo = true,
+  mostrarBotaoGit = false,
+  mostrarBotaoGitFront = false,
   mostrarBotaoVoltar = true,
   mostrarBotaoApagar = true,
   mostrarBotaoSalvar = true,
@@ -36,7 +49,11 @@ export const FerramentasDeDetalhe: React.FC<IFerramentasDeDetalheProps> = ({
   mostrarBotaoApagarCarregando = false,
   mostrarBotaoSalvarCarregando = false,
   mostrarBotaoSalvarEFecharCarregando = false,
-
+  mostrarBotaoGitCarregando = false,
+  mostrarBotaoGitFrontCarregando = false,
+  
+  aoClicarEmGit,
+  aoClicarEmGitFront,
   aoClicarEmNovo,
   aoClicarEmVoltar,
   aoClicarEmApagar,
@@ -139,6 +156,38 @@ export const FerramentasDeDetalhe: React.FC<IFerramentasDeDetalheProps> = ({
 
       {mostrarBotaoVoltarCarregando &&
       (<Skeleton width={110} height={65}/>)}
+
+      {mostrarBotaoGit && !mostrarBotaoGitCarregando && (
+        <Button
+          color="secondary"
+          disableElevation
+          variant="contained"
+          onClick={aoClicarEmGit}
+          startIcon={<Icon>terminal</Icon>}
+        >
+          <Typography variant="button" noWrap>
+            {textoBotaoGit}
+          </Typography>
+        </Button>
+      )}
+
+      {mostrarBotaoGitCarregando && <Skeleton width={110} height={65} />}
+
+      {mostrarBotaoGitFront && !mostrarBotaoGitFrontCarregando && (
+        <Button
+          color="secondary"
+          disableElevation
+          variant="contained"
+          onClick={aoClicarEmGitFront}
+          startIcon={<Icon>terminal</Icon>}
+        >
+          <Typography variant="button" noWrap>
+            {textoBotaoGitFront}
+          </Typography>
+        </Button>
+      )}
+
+      {mostrarBotaoGitFrontCarregando && <Skeleton width={110} height={65} />}
 
     </Box>
   );

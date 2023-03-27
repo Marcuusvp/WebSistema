@@ -42,6 +42,14 @@ export const MenuLateral: React.FC<IMenuLateral> = ({ children }) => {
   const { isDrawerOpen, toggleDrawerOpen, drawerOptions} = useDrawerContext();
   const { toggleTheme } = useAppThemeContext();
   const { logout } = useAuthContext();
+  const navigate = useNavigate();
+  
+  const handleSobreClick = () => {
+    if (smDown) {
+      toggleDrawerOpen();
+    }
+    navigate('/sobre');
+  };
 
   return (
     <>
@@ -68,6 +76,12 @@ export const MenuLateral: React.FC<IMenuLateral> = ({ children }) => {
           </Box>
           <Box>
             <List component="nav">
+              <ListItemButton onClick={handleSobreClick}>
+                <ListItemIcon>
+                  <Icon>info</Icon>
+                </ListItemIcon>
+                <ListItemText primary="Sobre"/>
+              </ListItemButton>
               <ListItemButton onClick={toggleTheme}>
                 <ListItemIcon>
                   <Icon>dark_mode</Icon>
