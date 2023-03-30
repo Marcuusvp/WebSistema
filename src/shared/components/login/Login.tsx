@@ -85,7 +85,7 @@ export const Login: React.FC<ILoginProps> = ({ children }) => {
                 helperText={passwordError}
                 onKeyDown={() => setPasswordError('')}/>
            
-              <Link alignSelf='center' onClick={esqueciMinhaSenha}>Esqueci minha senha</Link>
+              <Link alignSelf='center' onClick={esqueciMinhaSenha} style={{ cursor: 'pointer' }}>Esqueci minha senha</Link>
             </Box>
           </CardContent>
           <CardActions>
