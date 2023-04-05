@@ -1,4 +1,4 @@
-import { Box, Grid, LinearProgress, Paper, Typography } from '@mui/material';
+import { Box, Button, Grid, LinearProgress, Paper, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FerramentasDeDetalhe } from '../../shared/components';
@@ -9,6 +9,7 @@ import * as yup from 'yup';
 
 interface IFormData{
   nome: string,
+  imagemUrl?: string,
 }
 
 const formValidationSchema: yup.Schema<IFormData> = yup.object().shape({
@@ -21,6 +22,10 @@ export const DetalheDeCidades: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [nome, setNome] = useState('');
   const { formRef, save, saveAndClose, isSaveAndClose } = useVForm();
+  const [imagem, setImagem] = useState<File | undefined>(undefined);
+  const [imagemUrl, setImagemUrl] = useState<string | undefined>(undefined);
+
+
   
   useEffect(() =>{
     if(id !== 'cadastro'){
@@ -37,6 +42,7 @@ export const DetalheDeCidades: React.FC = () => {
             navigate('/cidades');
           } else{
             setNome(result.nome);
+            setImagemUrl(result.imagemUrl);
             formRef.current?.setData(result);
           }
         });
@@ -47,11 +53,17 @@ export const DetalheDeCidades: React.FC = () => {
     }
   },[id]);
 
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      setImagem(event.target.files[0]);
+    }
+  };
+  
   const handleSave = (dados: IFormData) => {
     formValidationSchema.validate(dados, { abortEarly:false }).then((dadosValidados) => {
       setIsLoading(true);    
       if(id === 'cadastro'){
-        CidadesServices.create(dadosValidados).then((result) => {
+        CidadesServices.create({ ...dadosValidados, imagem }).then((result) => {
           setIsLoading(false);
           if (result instanceof Error){
             alert(result.message);
@@ -64,7 +76,7 @@ export const DetalheDeCidades: React.FC = () => {
           }
         });
       } else{      
-        CidadesServices.updateById(Number(id), {id:Number(id), ...dadosValidados})
+        CidadesServices.updateById(Number(id), { id: Number(id), ...dadosValidados, imagem: imagem})
           .then((result) => {
             setIsLoading(false);
 
@@ -135,6 +147,39 @@ export const DetalheDeCidades: React.FC = () => {
               <Grid item md={6}>
                 <VTextField onChange={(e) => setNome(e.target.value) } label='Cidade' name='nome' fullWidth disabled={isLoading}/>
               </Grid>
+            </Grid>
+
+            <Grid item md={6}>
+              {imagem && (
+                <img
+                  src={URL.createObjectURL(imagem)}
+                  alt="Imagem da cidade"
+                  style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+                />
+              )}
+              {!imagem && id !== 'cadastro' && imagemUrl && (
+                <img
+                  src={imagemUrl}
+                  alt="Imagem da cidade"
+                  style={{ width: '200px', height: '200px', objectFit: 'cover' }}
+                />
+              )}
+            </Grid>
+
+            <Grid item md={6}>
+              <input
+                accept="image/*"
+                style={{ display: 'none' }}
+                id="upload-image"
+                type="file"
+                onChange={handleImageChange}
+              />
+              <label htmlFor="upload-image">
+                <Button variant="outlined" component="span">
+                Enviar imagem
+                </Button>
+              </label>
+              
             </Grid>
 
           </Grid>

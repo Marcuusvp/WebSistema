@@ -9,11 +9,14 @@ type TCidadesComTotalCount = {
 export interface IListagemCidade{
   id: number;
   nome: string;
+  imagemUrl: string;
 }
 
 export interface IDetalheCidade{
   id: number;
   nome: string;
+  imagem?: File | undefined;
+  imagemUrl?: string;
 }
 
 const getAll = async (page = 1, filter = ''): Promise<TCidadesComTotalCount | Error> => {
@@ -44,7 +47,14 @@ const getById = async (id: number): Promise<IDetalheCidade | Error> => {
 
 const create = async (dados: Omit<IDetalheCidade, 'id'> ): Promise<number | Error> => {
   try {    
-    const { data } = await AuthApi.post<IDetalheCidade>('/cadastrar-cidade', dados);
+    const formData = new FormData();
+    formData.append('nome', dados.nome);
+    if (dados.imagem) {
+      formData.append('imagem', dados.imagem);
+    }
+    const { data } = await AuthApi.post<IDetalheCidade>('/cadastrar-cidade', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
     if(data){
       return data.id;
     } 
@@ -56,12 +66,20 @@ const create = async (dados: Omit<IDetalheCidade, 'id'> ): Promise<number | Erro
 };
 
 const updateById = async (id: number, dados: IDetalheCidade): Promise<void | Error> => {
-  try {    
-    await AuthApi.put(`/atualizar-cidade/${id}`, dados);
+  try {
+    const formData = new FormData();
+    formData.append('nome', dados.nome);
+    if (dados.imagem) {
+      formData.append('imagem', dados.imagem);
+    }    
+    await AuthApi.put(`/atualizar-cidade/${id}`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
   } catch (error) {
-    return new Error((error as {message: string}).message || 'Ocorreu um erro inesperado, contate o suporte'); 
+    return new Error((error as {message: string}).message || 'Ocorreu um erro inesperado, contate o suporte');
   }
 };
+
 
 const deleteById = async (id: number): Promise<void | Error> => {
   try {    

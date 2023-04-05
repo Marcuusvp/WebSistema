@@ -79,6 +79,7 @@ export const ListagemDeCidades: React.FC = () => {
             <TableRow>
               <TableCell width={100}>Ações</TableCell>
               <TableCell>Cidade</TableCell>
+              <TableCell>Foto</TableCell>
             </TableRow>
 
           </TableHead>
@@ -95,6 +96,9 @@ export const ListagemDeCidades: React.FC = () => {
                   </IconButton>
                 </TableCell>
                 <TableCell>{row.nome}</TableCell>
+                <TableCell>
+                  <img src={row.imagemUrl} alt={row.nome} style={{ maxWidth: 150, maxHeight: 150, objectFit: 'cover' }} />
+                </TableCell>
               </TableRow>
             ))}
 
